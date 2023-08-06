@@ -1,0 +1,20 @@
+.board {
+    flex-grow: 1;
+    display: grid;
+    grid-template: repeat(9, minmax(0, 1fr)) / repeat(9, minmax(0, 1fr));
+    max-height: 100vmin;
+    max-width: 100vmin;
+}
+
+.board * {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    border: 1px black solid;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/ 1;
+    font-size: 1.5em;
+}
