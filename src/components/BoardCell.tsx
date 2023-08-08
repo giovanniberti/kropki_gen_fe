@@ -1,33 +1,61 @@
-import {Constraint} from "../model/Constraints";
+import {cellComparator, compareConstraintsByCells, Constraint, DotType} from "../model/Constraints";
 
 interface BoardCellProps {
     id?: string,
     constraints: Constraint[]
 }
 
-function renderConstraint(constraint: Constraint) {
+function computeConstraintStyle(constraint: Constraint): { style: any, value: any } {
+    let value = undefined;
+    let style = undefined;
+
     if (constraint.type === "cell") {
-        return {
-            value: constraint.value
-        }
+        value = constraint.value;
     } else {
-        return {
-            value: ""
+        const [cell1, cell2] = Array.from(constraint.cells()).sort(cellComparator);
+        let position;
+        if (cell1[0] == cell2[0] - 1) {
+            position = "bottom";
+
+            if (cell1[1] != cell2[1]) {
+                console.error("Invalid constraint between cells:" + JSON.stringify([cell1, cell2]))
+            }
+        } else if (cell1[1] == cell2[1] - 1) {
+            position = "right";
+
+            if (cell1[0] != cell2[0]) {
+                console.error("Invalid constraint between cells:" + JSON.stringify([cell1, cell2]))
+            }
+        } else {
+            console.error("Invalid constraint between cells:" + JSON.stringify([cell1, cell2]))
         }
+
+        style = [position, constraint.dotType == DotType.BLACK ? "black" : "white"];
     }
+
+    return {
+        value,
+        style
+    };
 }
 
 export function BoardCell({constraints, id}: BoardCellProps) {
-    const firstConstraint = constraints.length > 0 ? constraints[0] : undefined;
+    const cellData = constraints.reduce((data, constraint) => {
+        const newStyle = computeConstraintStyle(constraint);
+        return {
+            ...JSON.parse(JSON.stringify(data)),
+            ...JSON.parse(JSON.stringify(newStyle))
+        }
+    }, { value: undefined, style: undefined });
 
-    if (firstConstraint !== undefined) {
-        console.log("fc: " + JSON.stringify(firstConstraint));
-        console.log(renderConstraint(firstConstraint).value)
+    if (cellData.style) {
+        console.log(JSON.stringify(cellData.style));
     }
 
     return (
-        <div id={id}>
-            {firstConstraint ? renderConstraint(firstConstraint).value : ""}
+        <div id={id} className="board-cell">
+            <span className="board-text">{cellData.value}</span>
+            <span className={"board-underline " + cellData.style?.join(" ")} />
         </div>
     );
 }

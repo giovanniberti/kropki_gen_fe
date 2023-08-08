@@ -6,15 +6,86 @@
     max-width: 100vmin;
 }
 
-.board * {
+.board div {
+    position: relative;
     display: flex;
     justify-content: center;
     text-align: center;
     align-content: center;
     align-items: center;
-    border: 1px black solid;
+    border: 1px var(--text-color) solid;
     width: 100%;
     height: auto;
     aspect-ratio: 1/ 1;
     font-size: 1.5em;
+}
+
+.board-text {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.board-underline {
+    display: table;
+}
+
+.board-underline::after {
+    --underline-size: 10px;
+    --neg-underline-size: calc(-1 * var(--underline-size));
+    --radius-size: calc(0.5 * var(--underline-size));
+    --neg-radius-size: calc(-0.5 * var(--underline-size));
+    --bottom-fix: 1px;
+
+    --color: #ff0000;
+    --fill-color: #ff0000;
+
+    display: none;
+    position: absolute;
+    border: 1px solid var(--color);
+    border-radius: 100%;
+    background-color: var(--fill-color);
+    content: "";
+    height: var(--underline-size);
+    width: var(--underline-size);
+
+    z-index: 1;
+}
+
+@media (max-width: 720px) {
+    .board-underline::after {
+        --underline-size: 6px;
+    }
+
+    .board-underline.bottom::after {
+        --bottom-fix: 0px;
+    }
+}
+
+.board-underline.bottom::after {
+    display: inline-block;
+
+    left: 50%;
+    top: calc(100% - var(--bottom-fix));
+    transform: translate(-50%, var(--neg-radius-size));
+}
+
+.board-underline.right::after {
+    display: inline-block;
+
+    left: calc(100% - 1px);
+    top: 50%;
+    transform: translate(var(--neg-radius-size), -50%);
+}
+
+.board-underline.white::after {
+    --fill-color: var(--background-color);
+    --color: var(--text-color);
+}
+
+.board-underline.black::after {
+    --fill-color: var(--text-color);
+    --color: var(--text-color);
 }

@@ -48,7 +48,7 @@ function numberComparator(a: number, b: number): number {
     return a - b;
 }
 
-function cellComparator(a: Cell, b: Cell): number {
+export function cellComparator(a: Cell, b: Cell): number {
     const [coordA1, coordA2] = a;
     const [coordB1, coordB2] = b;
 
@@ -69,7 +69,7 @@ export function referenceCell(constraint: Constraint): Cell {
         }
         case "dot": {
             const sortedCells = constraint._cells.sort(cellComparator);
-            return sortedCells.shift()
+            return sortedCells[0];
         }
     }
 }

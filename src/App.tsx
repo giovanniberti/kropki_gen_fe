@@ -1,11 +1,12 @@
 import './App.css'
 import {Board} from "./components/Board";
-import {CellConstraint} from "./model/Constraints";
+import {CellConstraint, DotConstraint, DotType} from "./model/Constraints";
 import {useState} from "react";
 
 function App() {
     const [constraints, setConstraints] = useState([
-        new CellConstraint([1, 1], 4)
+        new CellConstraint([1, 1], 4),
+        new DotConstraint([[1, 1], [1, 2]], DotType.BLACK)
     ]);
 
     return (
