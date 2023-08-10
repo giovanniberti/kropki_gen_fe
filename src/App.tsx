@@ -6,7 +6,8 @@ import {useState} from "react";
 function App() {
     const [constraints, setConstraints] = useState([
         new CellConstraint([1, 1], 4),
-        new DotConstraint([[1, 1], [1, 2]], DotType.BLACK)
+        new DotConstraint([[1, 1], [1, 2]], DotType.BLACK),
+        new DotConstraint([[1, 1], [2, 1]], DotType.WHITE)
     ]);
 
     return (

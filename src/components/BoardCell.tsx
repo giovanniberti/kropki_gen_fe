@@ -5,23 +5,24 @@ interface BoardCellProps {
     constraints: Constraint[]
 }
 
-function computeConstraintStyle(constraint: Constraint): { style: any, value: any } {
+function computeConstraintStyle(constraint: Constraint): { bottom: any; right: any; value: any } {
     let value = undefined;
-    let style = undefined;
+    let bottom = undefined;
+    let right = undefined;
 
     if (constraint.type === "cell") {
         value = constraint.value;
     } else {
         const [cell1, cell2] = Array.from(constraint.cells()).sort(cellComparator);
-        let position;
+
         if (cell1[0] == cell2[0] - 1) {
-            position = "bottom";
+            bottom = constraint.dotType == DotType.BLACK ? "black" : "white";
 
             if (cell1[1] != cell2[1]) {
                 console.error("Invalid constraint between cells:" + JSON.stringify([cell1, cell2]))
             }
         } else if (cell1[1] == cell2[1] - 1) {
-            position = "right";
+            right = constraint.dotType == DotType.BLACK ? "black" : "white";
 
             if (cell1[0] != cell2[0]) {
                 console.error("Invalid constraint between cells:" + JSON.stringify([cell1, cell2]))
@@ -29,13 +30,12 @@ function computeConstraintStyle(constraint: Constraint): { style: any, value: an
         } else {
             console.error("Invalid constraint between cells:" + JSON.stringify([cell1, cell2]))
         }
-
-        style = [position, constraint.dotType == DotType.BLACK ? "black" : "white"];
     }
 
     return {
         value,
-        style
+        bottom,
+        right
     };
 }
 
@@ -46,16 +46,20 @@ export function BoardCell({constraints, id}: BoardCellProps) {
             ...JSON.parse(JSON.stringify(data)),
             ...JSON.parse(JSON.stringify(newStyle))
         }
-    }, { value: undefined, style: undefined });
+    }, { value: undefined, bottom: undefined, right: undefined });
 
-    if (cellData.style) {
-        console.log(JSON.stringify(cellData.style));
+    if (cellData.value !== undefined) {
+        console.log(JSON.stringify(cellData));
     }
+
+    const bottom = cellData.bottom ? "bottom " + cellData.bottom : "";
+    const right = cellData.right ? "right " + cellData.right : "";
 
     return (
         <div id={id} className="board-cell">
             <span className="board-text">{cellData.value}</span>
-            <span className={"board-underline " + cellData.style?.join(" ")} />
+            <span className={"board-underline " + bottom} />
+            <span className={"board-underline " + right} />
         </div>
     );
 }
