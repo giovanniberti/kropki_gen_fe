@@ -48,10 +48,6 @@ export function BoardCell({constraints, id}: BoardCellProps) {
         }
     }, { value: undefined, bottom: undefined, right: undefined });
 
-    if (cellData.value !== undefined) {
-        console.log(JSON.stringify(cellData));
-    }
-
     const bottom = cellData.bottom ? "bottom " + cellData.bottom : "";
     const right = cellData.right ? "right " + cellData.right : "";
 

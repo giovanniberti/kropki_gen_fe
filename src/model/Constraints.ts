@@ -39,7 +39,7 @@ export class DotConstraint implements ConstraintMethods {
     }
 
     cells(): Set<Cell> {
-        return new Set<>(this._cells);
+        return new Set(this._cells);
     }
 
 }

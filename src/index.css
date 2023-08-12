@@ -16,3 +16,8 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 }
+
+input {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
