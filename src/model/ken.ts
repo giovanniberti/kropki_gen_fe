@@ -245,8 +245,8 @@ const parseRow: S.State<ParserState, Constraint[]> = (initialState: ParserState)
 
 export function decodeKEN(ken: string): Constraint[] {
     const rows = ken.split('/');
-    if (rows.length != 8) {
-        throw new Error(`Invalid number of rows (${rows}) in ken: "${ken}"`)
+    if (rows.length != 9) {
+        throw new Error(`Invalid number of rows (${rows.length}) in ken: "${ken}"`)
     }
 
     const constraints = [];
