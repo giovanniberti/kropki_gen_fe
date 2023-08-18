@@ -2,8 +2,8 @@
     flex-grow: 1;
     display: grid;
     grid-template: repeat(9, minmax(0, 1fr)) / repeat(9, minmax(0, 1fr));
-    max-height: 100vmin;
-    max-width: 100vmin;
+    max-height: 80vmin;
+    max-width: 80vmin;
 }
 
 .board div {
