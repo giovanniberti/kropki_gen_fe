@@ -15,6 +15,7 @@ function App() {
         <>
             <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center" }}>
                 <h1>B.A.R.B.I.E.</h1>
+                <h3 style={{ marginTop: "-8px" }}><u>B</u>oard <u>A</u>-sta<u>r</u> <u>B</u>ased <u>I</u>nteractive <u>E</u>xplorer</h3>
                 <div style={{
                     display: "flex",
                     justifyContent: "center"
