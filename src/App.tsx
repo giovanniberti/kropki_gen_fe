@@ -1,16 +1,14 @@
 import './App.css'
 import {Board} from "./components/Board";
-import {CellConstraint, DotConstraint, DotType} from "./model/Constraints";
-import {useState} from "react";
-import { decodeKEN } from './model/ken';
+import {useEffect, useState} from "react";
+import {decodeKEN, encodeConstraints} from './model/ken';
 import {AppClient, KropkiSuccessfulResponse} from "../generated";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 function App() {
-    const [constraints, setConstraints] = useState([
-        new CellConstraint([1, 1], 4),
-        new DotConstraint([[1, 1], [1, 2]], DotType.BLACK),
-        new DotConstraint([[1, 1], [2, 1]], DotType.WHITE)
-    ]);
+    const { ken } = useParams();
+    const navigate = useNavigate();
+    const constraints = ken ? decodeKEN(ken) : [];
 
     const client = new AppClient({
         BASE: 'http://localhost:8000',
@@ -24,11 +22,16 @@ function App() {
 
     const [loading, setLoading] = useState(false);
     const [difficulty, setDifficulty] = useState("Easy");
+    const [textFieldValue, setTextFieldValue] = useState<string | null>(null);
+
+    useEffect(() => {
+        setTextFieldValue(ken);
+    }, [ken]);
 
     return (
         <>
             <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center" }}>
-                <h1>B.A.R.B.I.E.</h1>
+                <h1><Link to="/">B.A.R.B.I.E.</Link></h1>
                 <h3 style={{ marginTop: "-8px" }}><u>B</u>oard <u>A</u>-sta<u>r</u> <u>B</u>ased <u>I</u>nteractive <u>E</u>xplorer</h3>
                 <div
                     style={{
@@ -49,10 +52,9 @@ function App() {
                             setLoading(true);
                             const response: KropkiSuccessfulResponse = await client.default.postKropki();
 
-                            const ken = response.ken;
+                            let ken = response.ken;
                             const kenSolution = response.solution;
 
-                            console.log(ken);
                             if (ken !== undefined) {
                                 const constraints = decodeKEN(ken);
                                 const solution = decodeKEN(kenSolution);
@@ -64,10 +66,12 @@ function App() {
                                 console.log("Redundant constraints for difficulty " + difficulty)
                                 console.dir(redundantConstraints);
 
-                                setConstraints(constraints.concat(redundantConstraints));
+                                ken = encodeConstraints(constraints.concat(redundantConstraints));
                             }
 
                             setLoading(false);
+                            setTextFieldValue(ken);
+                            navigate("/" + encodeURIComponent(ken));
                         }}
                     >
                         <select
@@ -80,6 +84,23 @@ function App() {
                         <button type="submit" disabled={loading}>{loading ? "Loading..." : "Generate Kropki"}</button>
                     </form>
                 </div>
+                {(navigator.share && ken) ?
+                    <button
+                        style={{
+                            width: "100px"
+                        }}
+                        onClick={() => {
+                            navigator.share({
+                                title: document.title,
+                                text: "Let's solve this Kropki! :)",
+                                url: window.location.href
+                            })
+                        }}
+                    >
+                        Share Kropki
+                    </button>
+                    : null
+                }
                 <div style={{
                     display: "flex",
                     justifyContent: "center"
@@ -98,7 +119,9 @@ function App() {
                             const constraints = decodeKEN(ken);
                             console.log("Decoded constraints:");
                             console.dir(constraints);
-                            setConstraints(constraints);
+
+                            setTextFieldValue(ken);
+                            navigate("/" + encodeURIComponent(ken));
                         }
                     }}
                 >
@@ -111,6 +134,8 @@ function App() {
                             marginRight: "auto"
                         }}
                         placeholder="Type KEN..."
+                        value={textFieldValue ?? ""}
+                        onChange={e => setTextFieldValue(e.target.value)}
                     />
                 </form>
             </div>

@@ -1,4 +1,4 @@
-import { pipe } from "fp-ts/lib/function";
+import {pipe} from "fp-ts/lib/function";
 import {Cell, CellConstraint, Constraint, DotConstraint, DotType} from "./Constraints";
 import * as S from "fp-ts/lib/State";
 import * as O from "fp-ts/lib/Option";
@@ -274,4 +274,117 @@ export function decodeKEN(ken: string): Constraint[] {
     }
 
     return constraints;
+}
+
+function encodeDotType(dotType?: DotType): string | null {
+    switch (dotType) {
+        case null: return null;
+        case DotType.BLACK: return "k";
+        case DotType.WHITE: return "w";
+    }
+}
+
+function encodeConstraintsForCell(constraints: Constraint[]): string {
+    let value = null;
+    let bottom = null;
+    let right = null;
+
+    for (const constraint of constraints) {
+        if (constraint.type == "cell") {
+            value = constraint.value;
+        } else if (constraint.type == "dot") {
+            const referenceCell = constraint.referenceCell();
+            const otherCell = Array.from(constraint.cells()).filter(x => x != referenceCell)[0];
+
+            if (referenceCell[0] == otherCell[0] && referenceCell[1] == otherCell[1] - 1) {
+                right = constraint.dotType;
+            } else if (referenceCell[0] == otherCell[0] - 1 && referenceCell[1] == otherCell[1]) {
+                bottom = constraint.dotType;
+            } else {
+                throw Error("Invalid cell combination for dot constraint!");
+            }
+        }
+    }
+
+    if (value != null && bottom == null && right == null) {
+        return value.toString();
+    } else {
+        value = value ?? "";
+        bottom = encodeDotType(bottom) ?? "x";
+        right = encodeDotType(right) ?? "x";
+
+        return `(${value}${bottom}${right})`;
+    }
+}
+
+function rleKEN(ken: string): string {
+    let compactKen = "";
+    let emptyCellSubstitutions = {
+        1: "A",
+        2: "B",
+        3: "C",
+        4: "D",
+        5: "E",
+        6: "F",
+        7: "G",
+        8: "H"
+    }
+
+    let aCount = 0;
+    for (let char of ken) {
+        if (char == "A") {
+            aCount += 1;
+        } else {
+            if (aCount > 0) {
+                compactKen += emptyCellSubstitutions[aCount];
+                aCount = 0;
+            }
+
+            compactKen += char;
+        }
+    }
+
+    return compactKen;
+}
+
+function gridCoords() {
+    let coords = [];
+
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            coords.push([i, j]);
+        }
+    }
+
+    return coords;
+}
+
+export function encodeConstraints(constraints: Constraint[]): string {
+    const constraintsByCells: Record<string, Set<Constraint>> = {}
+
+    for (let c of constraints) {
+        if (!(c.referenceCell in constraintsByCells)) {
+            constraintsByCells[c.referenceCell()] = new Set();
+        }
+
+        constraintsByCells[c.referenceCell()].add(c);
+    }
+
+    const grid = gridCoords().sort();
+    let ken = "";
+
+    for (let cell of grid) {
+        if (cell in constraintsByCells) {
+            let encoded = encodeConstraintsForCell(constraintsByCells[cell]);
+            ken += encoded;
+        } else {
+            ken += "A";
+        }
+
+        if (cell[1] == 8 && cell[0] != 8) {
+            ken += "/";
+        }
+    }
+
+    return rleKEN(ken);
 }

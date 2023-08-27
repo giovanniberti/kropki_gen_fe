@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import {Cell, Constraint, referenceCell} from "../model/Constraints";
+import {Constraint, referenceCell} from "../model/Constraints";
 import "./board.css";
 import {BoardCell} from "./BoardCell";
 
@@ -18,11 +17,6 @@ export function Board({ constraints }: BoardProps) {
             constraintsByCell[cell.toString()] = [c];
         }
     });
-
-    useEffect(() => {
-        console.log("constraints by cell");
-        console.log(constraintsByCell);
-    }, [constraints]);
 
     const grid = [];
     for (let i = 0; i < 9; i++) {

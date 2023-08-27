@@ -2,6 +2,7 @@ export type Constraint = ConstraintMethods & (CellConstraint | DotConstraint)
 
 interface ConstraintMethods {
     cells(): Set<Cell>
+    referenceCell(): Cell
 }
 
 export type Cell = [number, number]
@@ -19,6 +20,10 @@ export class CellConstraint implements ConstraintMethods {
 
     cells(): Set<Cell> {
         return new Set<Cell>([this.cell]);
+    }
+
+    referenceCell(): Cell {
+        return this.cell;
     }
 }
 
@@ -42,6 +47,9 @@ export class DotConstraint implements ConstraintMethods {
         return new Set(this._cells);
     }
 
+    referenceCell(): Cell {
+     return this._cells[0];
+    }
 }
 
 function numberComparator(a: number, b: number): number {
