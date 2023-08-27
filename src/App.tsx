@@ -66,7 +66,8 @@ function App() {
                                 console.log("Redundant constraints for difficulty " + difficulty)
                                 console.dir(redundantConstraints);
 
-                                ken = encodeConstraints(constraints.concat(redundantConstraints));
+                                const extendedCostraints = constraints.concat(redundantConstraints);
+                                ken = encodeConstraints(extendedCostraints);
                             }
 
                             setLoading(false);

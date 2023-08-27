@@ -42,7 +42,6 @@ const consumeValue: S.State<ParserState, Constraint[]> = (s) => {
                     return O.none;
                 }
 
-                console.log(`Parsing value: ${value} ${Number(value)}`);
                 const newConstraints = [...s.parsedConstraints, new CellConstraint(cell, Number(value))];
 
                 const newState: ParserState = {
@@ -124,8 +123,6 @@ const consumeDotConstraint: S.State<ParserState, Constraint[]> = (s) => {
                 A.compact,
             );
 
-            console.dir(matches);
-            console.log(`Matched value for dot: ${value}`);
             pipe(
                 s.currentCell,
                 O.map(c => new CellConstraint(c, Number(value))),
@@ -263,9 +260,6 @@ export function decodeKEN(ken: string): Constraint[] {
 
         constraints.push(...rowConstraints);
 
-        console.log(`New constraints for row ${rowIndex}:`);
-        console.dir(rowConstraints);
-
         if (state.remainingInput != "") {
             console.error(`Error while parsing row ${rowIndex}`);
         }
@@ -360,10 +354,12 @@ function gridCoords() {
 }
 
 export function encodeConstraints(constraints: Constraint[]): string {
+    console.dir(constraints);
     const constraintsByCells: Record<string, Set<Constraint>> = {}
+    console.dir(constraintsByCells);
 
     for (let c of constraints) {
-        if (!(c.referenceCell in constraintsByCells)) {
+        if (!(c.referenceCell() in constraintsByCells)) {
             constraintsByCells[c.referenceCell()] = new Set();
         }
 
@@ -374,8 +370,11 @@ export function encodeConstraints(constraints: Constraint[]): string {
     let ken = "";
 
     for (let cell of grid) {
+        console.log(`cell: ${cell}`);
         if (cell in constraintsByCells) {
             let encoded = encodeConstraintsForCell(constraintsByCells[cell]);
+            console.log(`Encode constraints: ${encoded}`)
+            console.dir(constraintsByCells[cell]);
             ken += encoded;
         } else {
             ken += "A";
