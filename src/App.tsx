@@ -11,7 +11,7 @@ function App() {
     const constraints = ken ? decodeKEN(ken) : [];
 
     const client = new AppClient({
-        BASE: 'http://localhost:8000',
+        BASE: import.meta.env.VITE_API_BASEPATH,
     });
 
     const DIFFICULTY_MAP = {
