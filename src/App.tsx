@@ -141,6 +141,7 @@ function App() {
                     />
                 </form>
             </div>
+            <div style={{ marginTop: "16px" }}>Made with ❤️ by <a style={{ color: "#0074d9" }} target="_blank" href="https://github.com/giovanniberti">Giovanni Berti</a></div>
         </>
     )
 }
