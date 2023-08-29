@@ -272,6 +272,7 @@ export function decodeKEN(ken: string): Constraint[] {
 
 function encodeDotType(dotType?: DotType): string | null {
     switch (dotType) {
+        case undefined:
         case null: return null;
         case DotType.BLACK: return "k";
         case DotType.WHITE: return "w";
