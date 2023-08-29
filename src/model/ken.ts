@@ -276,12 +276,14 @@ function encodeDotType(dotType?: DotType): string | null {
         case DotType.BLACK: return "k";
         case DotType.WHITE: return "w";
     }
+
+    throw new Error("Shouldn't be possible!");
 }
 
 function encodeConstraintsForCell(constraints: Constraint[]): string {
-    let value = null;
-    let bottom = null;
-    let right = null;
+    let value = undefined;
+    let bottom = undefined;
+    let right = undefined;
 
     for (const constraint of constraints) {
         if (constraint.type == "cell") {
@@ -300,7 +302,7 @@ function encodeConstraintsForCell(constraints: Constraint[]): string {
         }
     }
 
-    if (value != null && bottom == null && right == null) {
+    if (value != undefined && bottom == undefined && right == undefined) {
         return value.toString();
     } else {
         value = value ?? "";
@@ -313,7 +315,7 @@ function encodeConstraintsForCell(constraints: Constraint[]): string {
 
 function rleKEN(ken: string): string {
     let compactKen = "";
-    let emptyCellSubstitutions = {
+    let emptyCellSubstitutions: Record<number, string> = {
         1: "A",
         2: "B",
         3: "C",
@@ -359,11 +361,11 @@ export function encodeConstraints(constraints: Constraint[]): string {
     console.dir(constraintsByCells);
 
     for (let c of constraints) {
-        if (!(c.referenceCell() in constraintsByCells)) {
-            constraintsByCells[c.referenceCell()] = new Set();
+        if (!(c.referenceCell().toString() in constraintsByCells)) {
+            constraintsByCells[c.referenceCell().toString()] = new Set();
         }
 
-        constraintsByCells[c.referenceCell()].add(c);
+        constraintsByCells[c.referenceCell().toString()].add(c);
     }
 
     const grid = gridCoords().sort();
@@ -371,10 +373,10 @@ export function encodeConstraints(constraints: Constraint[]): string {
 
     for (let cell of grid) {
         console.log(`cell: ${cell}`);
-        if (cell in constraintsByCells) {
-            let encoded = encodeConstraintsForCell(constraintsByCells[cell]);
+        if (cell.toString() in constraintsByCells) {
+            let encoded = encodeConstraintsForCell(Array.from(constraintsByCells[cell.toString()]));
             console.log(`Encode constraints: ${encoded}`)
-            console.dir(constraintsByCells[cell]);
+            console.dir(constraintsByCells[cell.toString()]);
             ken += encoded;
         } else {
             ken += "A";

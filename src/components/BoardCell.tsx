@@ -1,4 +1,4 @@
-import {cellComparator, compareConstraintsByCells, Constraint, DotType} from "../model/Constraints";
+import {cellComparator, Constraint, DotType} from "../model/Constraints";
 
 interface BoardCellProps {
     id?: string,

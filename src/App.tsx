@@ -18,14 +18,14 @@ function App() {
         "Easy": 15,
         "Medium": 10,
         "Hard": 5
-    }
+    };
 
     const [loading, setLoading] = useState(false);
     const [difficulty, setDifficulty] = useState("Easy");
     const [textFieldValue, setTextFieldValue] = useState<string | null>(null);
 
     useEffect(() => {
-        setTextFieldValue(ken);
+        setTextFieldValue(ken ?? null);
     }, [ken]);
 
     return (
@@ -62,7 +62,7 @@ function App() {
                                 console.log("Decoded constraints:");
                                 console.dir(constraints);
 
-                                const redundantConstraints = sample(solution, DIFFICULTY_MAP[difficulty]);
+                                const redundantConstraints = sample(solution, DIFFICULTY_MAP[difficulty as keyof typeof DIFFICULTY_MAP]);
                                 console.log("Redundant constraints for difficulty " + difficulty)
                                 console.dir(redundantConstraints);
 
@@ -85,7 +85,8 @@ function App() {
                         <button type="submit" disabled={loading}>{loading ? "Loading..." : "Generate Kropki"}</button>
                     </form>
                 </div>
-                {(navigator.share && ken) ?
+                {// @ts-ignore
+                (navigator.share && ken) ?
                     <button
                         style={{
                             width: "100px"
