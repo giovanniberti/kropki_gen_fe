@@ -18,7 +18,7 @@ type ParserState = {
     parsedConstraints: Constraint[]
 }
 
-function nextCellForRow(cell: Cell): O.Option<Cell> {
+export function nextCellForRow(cell: Cell): O.Option<Cell> {
     if (cell[1] == 8) {
         return O.none;
     } else {

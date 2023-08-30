@@ -7,17 +7,40 @@
 }
 
 .board div {
+    box-sizing: border-box;
     position: relative;
     display: flex;
     justify-content: center;
     text-align: center;
     align-content: center;
     align-items: center;
-    border: 1px var(--text-color) solid;
+    outline: 1px var(--text-color) solid;
     width: 100%;
     height: auto;
     aspect-ratio: 1/ 1;
     font-size: 1.5em;
+
+    --strong-border-width: 3px;
+}
+
+div.strong-border-left {
+    border-left: var(--strong-border-width) var(--text-color) solid;
+}
+
+div.strong-border-right {
+    border-right: var(--strong-border-width) var(--text-color) solid;
+}
+
+div.strong-border-top {
+    border-top: var(--strong-border-width) var(--text-color) solid;
+}
+
+div.strong-border-bottom {
+    border-bottom: var(--strong-border-width) var(--text-color) solid;
+}
+
+.strong-border {
+    border: 1px var(--text-color) solid;
 }
 
 .board-text {

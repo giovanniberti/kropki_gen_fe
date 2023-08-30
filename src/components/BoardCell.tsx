@@ -2,7 +2,8 @@ import {cellComparator, Constraint, DotType} from "../model/Constraints";
 
 interface BoardCellProps {
     id?: string,
-    constraints: Constraint[]
+    constraints: Constraint[],
+    className?: string
 }
 
 function computeConstraintStyle(constraint: Constraint): { bottom: any; right: any; value: any } {
@@ -39,7 +40,7 @@ function computeConstraintStyle(constraint: Constraint): { bottom: any; right: a
     };
 }
 
-export function BoardCell({constraints, id}: BoardCellProps) {
+export function BoardCell({constraints, id, className}: BoardCellProps) {
     const cellData = constraints.reduce((data, constraint) => {
         const newStyle = computeConstraintStyle(constraint);
         return {
@@ -52,7 +53,7 @@ export function BoardCell({constraints, id}: BoardCellProps) {
     const right = cellData.right ? "right " + cellData.right : "";
 
     return (
-        <div id={id} className="board-cell">
+        <div id={id} className={"board-cell " + className}>
             <span className="board-text">{cellData.value}</span>
             <span className={"board-underline " + bottom} />
             <span className={"board-underline " + right} />
