@@ -23,6 +23,12 @@
     --strong-border-width: 3px;
 }
 
+@media screen, (max-width < 1280px) {
+    .board div {
+        --strong-border-width: 2px;
+    }
+}
+
 div.strong-border-left {
     border-left: var(--strong-border-width) var(--text-color) solid;
 }
