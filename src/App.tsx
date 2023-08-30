@@ -17,7 +17,8 @@ function App() {
     const DIFFICULTY_MAP = {
         "Easy": 15,
         "Medium": 10,
-        "Hard": 5
+        "Hard": 5,
+        "Extreme": 0
     };
 
     const [loading, setLoading] = useState(false);
@@ -79,7 +80,7 @@ function App() {
                             onChange={e =>setDifficulty(e.target.value)}
                         >
                             {Object.entries(DIFFICULTY_MAP).map(([k, v]) => {
-                                return <option value={k}>{k} ({v} hints)</option>
+                                return <option value={k}>{k} ({v} additional hints)</option>
                             })}
                         </select>
                         <button type="submit" disabled={loading}>{loading ? "Loading..." : "Generate Kropki"}</button>
