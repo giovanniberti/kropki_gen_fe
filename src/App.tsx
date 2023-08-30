@@ -39,13 +39,13 @@ function App() {
                         flexDirection: "row",
                         justifyContent: "center",
                         alignContent: "center",
+                        marginBottom: "8px"
                 }}>
                     <form
                         style={{
                             display: "flex",
                             flexDirection: "row",
                             gap: "8px",
-                            marginBottom: "8px"
                         }}
                         onSubmit={async event => {
                             event.preventDefault();
@@ -84,25 +84,26 @@ function App() {
                         </select>
                         <button type="submit" disabled={loading}>{loading ? "Loading..." : "Generate Kropki"}</button>
                     </form>
+                    {// @ts-ignore
+                        (ken && navigator.share) ?
+                        <button
+                            style={{
+                                width: "100px",
+                                marginLeft: "8px"
+                            }}
+                            onClick={() => {
+                                navigator.share({
+                                    title: document.title,
+                                    text: "Let's solve this Kropki! :)",
+                                    url: window.location.href
+                                })
+                            }}
+                        >
+                            Share Kropki
+                        </button>
+                        : null
+                    }
                 </div>
-                {// @ts-ignore
-                (navigator.share && ken) ?
-                    <button
-                        style={{
-                            width: "100px"
-                        }}
-                        onClick={() => {
-                            navigator.share({
-                                title: document.title,
-                                text: "Let's solve this Kropki! :)",
-                                url: window.location.href
-                            })
-                        }}
-                    >
-                        Share Kropki
-                    </button>
-                    : null
-                }
                 <div style={{
                     display: "flex",
                     justifyContent: "center"

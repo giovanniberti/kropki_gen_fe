@@ -24,6 +24,11 @@
 }
 
 @media screen, (max-width < 1280px) {
+    .board {
+        max-height: 90vmin;
+        max-width: 90vmin;
+    }
+
     .board div {
         --strong-border-width: 2px;
     }
